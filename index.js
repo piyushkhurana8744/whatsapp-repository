@@ -1,44 +1,27 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-
-
-const app=express()
+const http = require('http');
 const url = require('url');
-const connection=require("./config/db")
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+const server = http.createServer((req, res) => {
+  const query = url.parse(req.url, true).query;
 
-app.get("/",(req,res)=>{
-    res.send("hello")
-})
+  if (req.method === 'GET' && query['hub.mode'] === 'subscribe') {
+    const challenge = query['hub.challenge'];
+    const verifyToken = 'End_of_the_day'; // Replace with your verify token
 
-app.get('/webhooks/github', (req, res) => {
-    
-    const mode = r.RequestQuery["hub.mode"]
-
-const my_shared_secret = "complete"
-
-
-if (mode == "subscribe") then
-  
-  const token = r.RequestQuery["hub.verify_token"]
-  
-  if (!token == my_shared_secret){
-    then  
-    r:SetResponseStatusCode(401)
-    r:StopForwarding()
-    return
-  } 
-  else{
- 
-    r:SetResponseBody(r.RequestQuery["hub.challenge"])
-    end
+    if (query['hub.verify_token'] === verifyToken) {
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end(challenge);
+    } else {
+      res.writeHead(403, {'Content-Type': 'text/plain'});
+      res.end('Invalid verify token');
+    }
+  } else {
+    res.writeHead(404, {'Content-Type': 'text/plain'});
+    res.end('Not found');
   }
- 
-  });
+});
 
-app.listen(8080,async()=>{
-    await connection
-    console.log("server is running")
-})
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
