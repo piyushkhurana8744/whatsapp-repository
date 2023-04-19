@@ -2,7 +2,9 @@ const http = require('http');
 const url = require('url');
 
 const server = http.createServer((req, res) => {
+
   const query = url.parse(req.url, true).query;
+  res.send(req);
 
   if (req.method === 'GET' && query['hub.mode'] === 'subscribe') {
     const challenge = query['hub.challenge'];
@@ -17,7 +19,7 @@ const server = http.createServer((req, res) => {
     }
   } else {
     res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.end('Not found');
+    res.end('Not found'); 
   }
 });
 
