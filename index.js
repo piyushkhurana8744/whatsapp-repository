@@ -1,30 +1,32 @@
-const http = require('http');
-const url = require('url');
+var express = require('express')
+  , bodyParser = require('body-parser');
 
-const server = http.createServer((req, res) => {
+var app = express();
 
-  const query = url.parse(req.url, true).query;
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json())
 
-
-
-  if (req.method === 'GET' && query['hub.mode'] === 'subscribe') {
-    const challenge = query['hub.challenge'];
-    const verifyToken = 'End_of_the_day'; // Replace with your verify token
-
-    if (query['hub.verify_token'] === verifyToken) {
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end(challenge);
-    } else {
-      res.writeHead(403, {'Content-Type': 'text/plain'});
-      res.end('Invalid verify token');
-    }
+app.get("/webhook", function (req, res) {
+  
+ if (
+    req.query['hub.mode'] == 'subscribe' &&
+    req.query['hub.verify_token'] == 'endof'
+  ) {
+    res.send(req.query['hub.challenge']);
   } else {
-    res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.end('Not found'); 
+    res.sendStatus(400);
   }
 });
 
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// app.get('/webhook', function(req, res) {
+ 
+// });
+
+app.post("/webhook", function (request, response) {
+  console.log('Incoming webhook: ' + JSON.stringify(request.body));
+  response.sendStatus(200);
+});
+
+var listener = app.listen(4000, function () {
+  console.log('Your app is listening on port ' + listener.address().port);
 });
