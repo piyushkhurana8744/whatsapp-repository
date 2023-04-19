@@ -5,8 +5,7 @@ const server = http.createServer((req, res) => {
 
   const query = url.parse(req.url, true).query;
 
-  
-  res.write(req);
+
 
   if (req.method === 'GET' && query['hub.mode'] === 'subscribe') {
     const challenge = query['hub.challenge'];
