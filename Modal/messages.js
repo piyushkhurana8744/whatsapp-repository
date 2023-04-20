@@ -10,6 +10,6 @@ const messageSchema=mongoose.Schema({
     text:{type:String,required:true},
 })
 
-const messageModel=mongoose.Schema("message",messageSchema)
+const messageModel=mongoose.model("message",messageSchema)
 
 module.exports=messageModel

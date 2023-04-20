@@ -6,7 +6,7 @@ const campaignupdateSchema=mongoose.Schema({
     campaign_name:{type:String,required:true},
     old_status:{type:String,required:true},
     new_status:{type:String,required:true},
-    pausedreasons:{type:[String],required:true},
+    pausedreasons:[{type:String,required:true}],
     completereason:{type:String,required:true}
 })
 

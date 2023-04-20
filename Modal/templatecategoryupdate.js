@@ -9,7 +9,7 @@ const templatecategoryupdateSchema=mongoose.Schema({
      newcategory:{type:String,required:true},
 })
 
-const templatecategoryupdateModel=mongoose.Model("templatecategoryupdate",templatecategoryupdateSchema)
+const templatecategoryupdateModel=mongoose.model("templatecategoryupdate",templatecategoryupdateSchema)
 
 
 module.exports=templatecategoryupdateModel

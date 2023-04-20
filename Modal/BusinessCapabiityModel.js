@@ -7,6 +7,6 @@ const businesscapabilitySchema=mongoose.Schema({
     max_phone_numbers_per_business:{type:String,required:true}
 })
 
-const businesscapabilityModel=mongoose.Schema("businesscapability",businesscapabilitySchema)
+const businesscapabilityModel=mongoose.model("businesscapability",businesscapabilitySchema)
 
 module.exports=businesscapabilityModel
